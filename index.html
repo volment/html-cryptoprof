@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>prof chart</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <style type="text/css">
+    </style>
+  </head>
+  <body>
+    <div>
+      <canvas id="myChart"></canvas>
+    </div>
+    <script>
+    function getCSVFile() {
+      var xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        createArray(xhr.responseText);
+      };
+
+      xhr.open("get", "prof.csv", true);
+      xhr.send(null);
+    }
+    getCSVFile();
+
+    function createXMLHttpRequest() {
+      var XMLhttpObject = null;
+      XMLhttpObject = new XMLHttpRequest();
+      return XMLhttpObject;
+    }
+
+    function createArray(csvData) {
+      var tempArray = csvData.split("\n");
+      var csvArray = new Array();
+      for(var i = 0; i<tempArray.length;i++){
+        csvArray[i] = tempArray[i].split(",");
+      }
+
+      var data = [];
+      var labels = [];
+      for(var i = 1; i < csvArray.length - 1; i++){
+        var btc = parseFloat(csvArray[i][0].replace(/\"/g, ''));
+        data.unshift(btc);
+        labels.unshift(csvArray[i][1].replace(/\"/g, ''));
+      };
+      data = data.reverse();
+
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: "prof",
+            'fill': false,
+            'strokeColor': "rgba(220, 220, 220, 1)",
+            'pointColor': "rgba(220, 220, 220, 1)",
+            data: data,
+          }]
+        },
+        options: {}
+      });
+    }
+    </script>
+  </body>
+</html>
